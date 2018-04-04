@@ -1,8 +1,7 @@
 <?php 
 
   public function avatar(Request $request){
-        $userId = Auth::guard()->user()->id;
-        $user = User::findOrFail($userId);
+        $user = new User();
 
         if($request->hasFile('avatar')) {
             if ($user->avatar){
@@ -10,7 +9,7 @@
             }
             $avatar = $request->file('avatar');
             $avatarName = $avatar->getClientOriginalName();
-            $fileName = "user_" . "_id_". Auth::guard()->user()->id . "_" . $avatarName;
+            $fileName = "user_" . $avatarName;
 
             $directory = public_path('/avatar/');
             $avatarUrl = $directory.$fileName;
