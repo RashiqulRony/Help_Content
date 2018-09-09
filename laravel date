@@ -1,0 +1,1 @@
+{!! date("d F Y", strtotime($user->created_at)) !!)
