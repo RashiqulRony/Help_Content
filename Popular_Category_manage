@@ -1,0 +1,8 @@
+     <?php
+     $topCategories = DB::table('job_categories')
+            ->leftJoin('job_jobs', 'job_categories.id', '=', 'job_jobs.category_id')
+            ->select(DB::raw('job_categories.title,job_categories.slug,count(job_jobs.category_id) as category_count'))
+            ->groupBy('job_jobs.category_id')
+            ->orderBy('category_count', 'desc')
+            ->take(3)
+            ->get();
