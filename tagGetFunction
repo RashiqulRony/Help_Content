@@ -1,0 +1,5 @@
+public function getTagService($tagname){
+        $name = $tagname;
+        $serviceTags = My_service::withAllTags($name)->orderBy('created_at', 'DESC')->get();
+        return view('service_tag_list', compact('serviceTags', 'name'));
+    }
