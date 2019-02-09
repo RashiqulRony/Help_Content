@@ -1,0 +1,18 @@
+1. Run git clone https://github.com/link
+2. Create a MySQL database for the project
+3. mysql -u root -p, if using Vagrant: mysql -u homestead -psecret
+4. create database laravelAuth;
+5. From the projects root run cp .env.example .env
+6. Configure your .env file
+7. Run composer update from the projects root folder
+8. From the projects root folder run:
+9. php artisan vendor:publish --tag=laravelroles &&
+10. php artisan vendor:publish --tag=laravel2step
+11. From the projects root folder run sudo chmod -R 755 ../laravel-auth
+12. From the projects root folder run php artisan key:generate
+13. From the projects root folder run php artisan migrate
+14. From the projects root folder run composer dump-autoload
+15. From the projects root folder run php artisan db:seed
+
+
+This is basic command of laravel
