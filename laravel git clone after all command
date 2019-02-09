@@ -1,6 +1,6 @@
 1. Run git clone https://github.com/link
-2. Create a MySQL database for the project
-3. mysql -u root -p, if using Vagrant: mysql -u homestead -psecret
+2. Run the command-> composer install
+3. Create a MySQL database for the project.  mysql -u root -p, if using Vagrant: mysql -u homestead -psecret
 4. create database laravelAuth;
 5. From the projects root run cp .env.example .env
 6. Configure your .env file
