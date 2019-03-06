@@ -1,0 +1,100 @@
+===================================
+          Ajax Code
+===================================
+
+
+        $("#sendContactRequest").validate({
+            rules: {
+                name: "required",
+                phone: "required",
+                message: "required",
+                subject: "required",
+                email: {
+                    required: true,
+                    email: true
+                },
+            },
+            submitHandler: function (form) {
+                sendContactRequestAJAX(form);
+                return false; // required to block normal submit since you used ajax
+            }
+        });
+
+        function sendContactRequestAJAX(form) {
+            var button_loader='<i class="fa fa-spinner fa-spin"></i> Sending...';
+            $("#submit").html(button_loader);
+            $.ajax({
+                type: "POST",
+                url: base_url + "main/addContact",
+                dataType: "JSON",
+                data: $(form).serialize(),
+                success: function (response) {
+                    if (response.status == 1) { // success
+                        $('#sendContactRequest')[0].reset();
+                        $("#submit").html('Send');
+                        alertMessage('#showResult', 'success', response.message);
+                    } else { // error
+                        alertMessage('#showResult', 'danger', response.message);
+                        $("#submit").html('Send');
+                    }
+
+                }
+            });
+
+        }
+
+        function alertMessage(selector, type, message) {
+            $(selector).html(''); // blank previous message
+            var getMsg = '<div class="alert alert-' + type + '" role="alert">' + message + '</div>'; // html part
+            $(selector).html(getMsg); // finally generate message
+            $(selector).show(); // show message
+        }
+
+
+
+========================================
+          PHP Function
+========================================
+
+
+    public function addContact(){
+        $resp = array();
+        if ($this->input->post()) {
+            $this->form_validation
+                ->set_rules('name', 'Name', 'trim|required')
+                ->set_rules('phone', 'Phone', 'trim|required')
+                ->set_rules('email', 'Email', 'trim|required')
+                ->set_rules('subject', 'Subject', 'trim|required')
+                ->set_rules('message', 'Message', 'trim|required')
+            ;
+
+            if ($this->form_validation->run() == TRUE) {
+                $data['client_type'] = $this->input->post('client_type');
+                $data['product_id']  = 0;
+                $data['name']        = $this->input->post('name');
+                $data['email']       = $this->input->post('email');
+                $data['phone']       = $this->input->post('phone');
+                $data['client_id']   = $this->input->post('client_id');
+                $data['subject']     = $this->input->post('subject');
+                $data['message']     = $this->input->post('message');
+                $data['send_date']   = date('Y-m-d H:i:s');
+                if ($this->global_model->insert('contacts', $data)) {
+                    $resp['status'] = 1;
+                    $successMsg = "Thank you for your email, soon we will contact with you.";
+                    $resp['message'] = $successMsg;
+                    $resp['redirectUrl'] = site_url();
+                } else {
+                    $data['error'] = mysql_error();
+                }
+            } else {
+                $resp['status'] = 0;
+                $resp['message'] = validation_errors();
+            }
+        }
+        echo json_encode($resp);
+        die();
+    }
+
+
+
+
