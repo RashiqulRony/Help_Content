@@ -1,0 +1,28 @@
+ if($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = $image->getClientOriginalExtension();
+            $fileName = time() . ".". $imageName;
+            //image Directory
+            $mainDirectory = 'assets/media/portfolio/';
+            $thumDirectory = 'assets/media/portfolio/thum/';
+            //image name
+            $mainImageUrl = $mainDirectory.$fileName;
+            $thumImageUrl = $thumDirectory.$fileName;
+            //image resize
+            Image::make($image)->resize(670, 500)->save($mainImageUrl);
+            Image::make($image)->resize(375, 280)->save($thumImageUrl);
+            $portfolio->image = $fileName;
+
+            // for save original image
+            $files = $request->file('image');
+            $ImageUpload = Image::make($files);
+            $originalPath = 'assets/media/portfolio/';
+            $ImageUpload->save($originalPath.time().$files->getClientOriginalExtension());
+
+            // for save thumnail image
+            $thumbnailPath = 'assets/media/portfolio/thum/';
+            $ImageUpload->resize(250,125);
+            $ImageUpload = $ImageUpload->save($thumbnailPath.time().$files->getClientOriginalExtension());
+            $portfolio->image = time().$files->getClientOriginalName();
+
+        }
