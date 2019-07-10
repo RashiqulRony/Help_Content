@@ -1,0 +1,10 @@
+//3 Table Join and Category Post & Comments Count
+--------------------------------------------------
+SELECT posts.*, categories.title, comments.*
+FROM posts
+  JOIN categories ON categories.id = posts.id
+  LEFT JOIN 
+  (
+    SELECT comments.post_id, COUNT(*) AS total_comment
+    FROM comments GROUP BY comments.post_id
+  ) comments ON comments.post_id = posts.id;
