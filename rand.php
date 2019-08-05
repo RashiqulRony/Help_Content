@@ -31,7 +31,6 @@ echo numberGen2(4);
 
 
 // Cupone Code generate
-
  $randResult = '';
     $value = array_merge(range(0, 9), range('a', 'z'), range('A', 'Z'));
     for ($i = 0; $i < 16; $i++) {
@@ -40,4 +39,13 @@ echo numberGen2(4);
     $code = str_split($randResult, 4);
     $cupon = $code[0].'-'.$code[1].'-'.$code[2].'-'.$code[3]; 
     print_r($cupon);
+
+// Cupone code generate 2 
+$value = array_merge(range(0, 9), range('a', 'z'), range('A', 'Z'));
+    for ($i = 0; $i < 16; $i++) {
+        $randResult .= $value[array_rand($value)];
+    }
+    $code = wordwrap($randResult,4,"-", true);
+    print_r($code );
+
 ?>
