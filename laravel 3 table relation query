@@ -1,0 +1,8 @@
+        $taskQueries = Task::where('tasks.status', 'active');
+        if ($employeeId){
+            $taskQueries->join('task_employee_relations as re_task', 'tasks.id', '=', 're_task.task_id');
+            $taskQueries->join('users', 'users.id', '=', 're_task.employee_id');
+            $taskQueries->select('tasks.id as task_id', 'tasks.name as task_name');
+            $taskQueries->where('re_task.employee_id', '=', $employeeId);
+        }
+        $tasks = $taskQueries->get();
