@@ -1,0 +1,1 @@
+{!! date('F d, Y | h:i a', strtotime($comment->created_at) + 6*3600) !!}
