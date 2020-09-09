@@ -1,0 +1,101 @@
+1. ForgotPasswordController.php Code:
+
+//Password Broker Facade
+use Illuminate\Support\Facades\Password;
+
+class ForgotPasswordController extends Controller
+{
+    [....]
+    
+
+    //Password Broker for Seller Model
+    public function broker()
+    {
+        return Password::broker('admins');
+    }
+}
+
+2. create AdminResetPasswordNotification class in app/Notifications:
+
+php artisan make:notification AdminResetPasswordNotification
+
+3. AdminResetPasswordNotification.php
+
+class AdminResetPasswordNotification extends Notification
+{
+    use Queueable;
+
+    //Token handler
+    public $token;
+
+    public function __construct($token)
+    {
+        $this->token = $token;
+    }
+
+
+    public function via($notifiable)
+    {
+        return ['mail'];
+    }
+
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)
+                    ->line('You are receiving this email because we received a password reset request for your account.')
+                    ->action('Reset Password', url('admin/password/reset', $this->token))
+                    ->line('If you did not request a password reset, no further action is required.');
+    }
+    
+    public function toArray($notifiable)
+    {
+        return [
+            //
+        ];
+    }
+}
+
+
+4. Admin.php admin model Code:
+
+
+//Notification for Admin
+use App\Notifications\AdminResetPasswordNotification;
+
+class Admin extends Authenticatable
+{
+    [....]
+
+    //Send password reset notification
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new AdminResetPasswordNotification($token));
+    }
+}
+
+
+5.ResetPasswordController.php Code:
+
+//Auth Facade
+use Illuminate\Support\Facades\Auth;
+
+//Password Broker Facade
+use Illuminate\Support\Facades\Password;
+
+class ResetPasswordController extends Controller
+{
+    [....]
+
+
+    //returns Password broker of seller
+    public function broker()
+    {
+        return Password::broker('admins');
+    }
+
+    //returns authentication guard of seller
+    protected function guard()
+    {
+        return Auth::guard('admin');
+    }
+}
