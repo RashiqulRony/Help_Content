@@ -1,0 +1,79 @@
+<?php
+$dir = $_SERVER['DOCUMENT_ROOT'];
+$pathData = scandir($dir);
+?>
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Project List</title>
+    <style type="text/css">
+        #myTbl {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #myTbl td, #myTbl th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        #myTbl tr:nth-child(even){background-color: #f2f2f2;}
+
+        #myTbl tr:hover {background-color: #ddd;}
+
+        #myTbl th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        body{
+            margin:0 auto;
+            padding:20px;
+            font-size:18px;
+            color:#000;
+            font-family:Tahoma, Geneva, sans-serif;
+        }
+        #myTbl img{
+            width: 20px;
+            margin: 0 10px -4px 0;
+        }
+        #myTbl a{
+            text-decoration: none !important;
+        }
+
+    </style>
+</head>
+<body>
+<table id="myTbl">
+    <tr>
+        <th width="10%" style="text-align: center">#S No.</th>
+        <th>Project Name</th>
+    </tr>
+    <tr>
+        <td style="text-align: center">1</td>
+        <td><a href="http://localhost/phpmyadmin/">phpmyadmin</a></td>
+    </tr>
+    <?php
+    $key = 2;
+    asort($pathData);
+    foreach($pathData as $val)
+    {
+        if(is_dir($dir.'/'.$val) && $val!='.' && $val!='..' && $val!='workspace')
+        {
+            ?>
+            <tr>
+                <td style="text-align: center"><?=$key?></td>
+                <td><a href="<?=$val?>"> <img src="folder.png" alt=""> <?=$val?></a></td>
+            </tr>
+            <?php
+            $key++;
+        }
+    }
+    ?>
+</table>
+</body>
+</html>
